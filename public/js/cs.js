@@ -3,7 +3,7 @@ export const PURPOSE = 'Ťuk je osobní deník pro zápis a sdílení údajů, k
 export const PRIVACY = 'Data zůstávají jen v tomto telefonu. Aplikace je neposílá na žádný server, dokud je sami neodešlete (sdílením nebo zálohou). Hosting stránky může při stažení aplikace vidět IP adresu, ale ne vaše záznamy. Při smazání dat prohlížeče nebo odinstalaci aplikace data zmizí, proto si občas uložte zálohu.';
 
 // Odkaz na zdrojový kód; vyplnit při publikaci (Task 11). Prázdný = odkaz se nezobrazí.
-export const SOURCE_URL = '';
+export const SOURCE_URL = 'https://github.com/mik67/tuk';
 
 export const INSTALL = {
   installed: { title: 'Aplikace je nainstalovaná', steps: [] },

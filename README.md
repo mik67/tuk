@@ -7,6 +7,8 @@ Funguje na iPhonu i Androidu, instaluje se z odkazu a **data zůstávají jen ve
 nepředpovídá, nedává doporučení a nenahrazuje lékaře. Není zdravotnickým prostředkem.
 V nouzi volejte 112 nebo 155.
 
+Aplikace: https://mik67.github.io/tuk/ (otevřete v telefonu a přidejte na plochu)
+
 ## Co umí
 - zápis jedním klepnutím, úprava a historie
 - prosté počty (po týdnech, četnost štítků)
