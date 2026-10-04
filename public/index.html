@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#f6f1ea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Ťuk</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="updateBar"><span>Je nová verze Ťuku.</span><button id="updateGo">Obnovit</button></div>
+<div id="app">
+
+<section class="view" id="v-welcome">
+  <div class="top">
+    <div class="hello"><div class="mascot" aria-hidden="true">🐣</div><div><h1>Ťuk</h1><p>Osobní deník ťuků</p></div></div>
+  </div>
+  <div class="scroll">
+    <div class="card"><p class="lead" id="wPurpose"></p></div>
+    <div class="card"><b>Soukromí</b><p id="wPrivacy"></p></div>
+    <div class="card" id="wInstall"></div>
+    <div class="row"><button class="btn" id="wStart">Začít</button></div>
+  </div>
+</section>
+
+<section class="view" id="v-home">
+  <div class="top">
+    <div class="hello"><div class="mascot" aria-hidden="true">🐣</div><div><h1 id="greet">Ahoj</h1><p id="today"></p></div></div>
+    <div id="homeBanner"></div>
+    <div class="nav">
+      <button data-go="history"><span>📖</span>Historie</button>
+      <button data-go="stats"><span>📊</span>Přehled</button>
+      <button data-go="export"><span>✉️</span>Export</button>
+      <button data-go="settings"><span>⚙️</span>Nastavení</button>
+    </div>
+  </div>
+  <div class="bottom"><button id="big" aria-label="Zapsat ťuk">+</button></div>
+</section>
+
+<section class="view" id="v-history">
+  <div class="head"><button class="back" data-go="home">← Zpět</button><h2>Historie</h2><button class="btn" id="addOther">＋ Přidat</button></div>
+  <div class="row"><select id="fType" style="flex:1" aria-label="Typ"><option value="">Vše</option><option value="tuk">Ťuky</option><option value="velka">Velké</option><option value="davka">Dávky</option></select>
+  <select id="fInt" style="flex:1" aria-label="Intenzita"><option value="">Každá intenzita</option><option>1</option><option>2</option><option>3</option></select></div>
+  <div class="scroll" id="histList"></div>
+</section>
+
+<section class="view" id="v-stats">
+  <div class="head"><button class="back" data-go="home">← Zpět</button><h2>Přehled</h2></div>
+  <div class="scroll" id="statsBody"></div>
+</section>
+
+<section class="view" id="v-export">
+  <div class="head"><button class="back" data-go="home">← Zpět</button><h2>Export</h2></div>
+  <div class="scroll">
+    <div class="card">
+      <label for="exPeriod">Období</label>
+      <select id="exPeriod"><option value="30">Posledních 30 dní</option><option value="90">Posledních 90 dní</option><option value="365">Poslední rok</option></select>
+      <p class="small">Souhrn (PDF) a tabulka (CSV) pro rodiče nebo lékaře. Používají odborné termíny (myoklonie, GTCS). Odešlete je přes sdílení v telefonu (e-mail, zprávy…).</p>
+      <div class="row"><button class="btn" id="exPrepare">Připravit export</button></div>
+      <p class="err" id="exErr"></p>
+      <div id="exResult" hidden>
+        <ul class="files" id="exFiles"></ul>
+        <div class="row"><button class="btn" id="exShare">Poslat…</button><button class="btn sec" id="exSavePdf">Uložit PDF</button><button class="btn sec" id="exSaveCsv">Uložit CSV</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-settings">
+  <div class="head"><button class="back" data-go="home">← Zpět</button><h2>Nastavení</h2></div>
+  <div class="scroll">
+    <div class="card">
+      <b>Údaje do exportu</b>
+      <label for="setName">Jméno (volitelné, jen do souhrnu)</label>
+      <input id="setName" maxlength="60" autocomplete="off">
+      <label for="setMed">Medikace (volný text, jen informace do souhrnu)</label>
+      <textarea id="setMed" rows="3" maxlength="500"></textarea>
+    </div>
+    <div class="card">
+      <b>Výchozí hodnoty pro jedno klepnutí</b>
+      <label>Intenzita</label><div class="row" id="setInt"></div>
+      <label>Co tomu předcházelo (předvybrané)</label><div class="row" id="setTr"></div>
+      <label for="newTrig">Vlastní štítek</label>
+      <div class="row"><input id="newTrig" maxlength="40" placeholder="např. horko" style="flex:1"><button class="btn" id="addTrig">Přidat</button></div>
+      <div class="row" id="trigList"></div>
+      <label for="setSeries">Ťuky po sobě do tolika minut se řadí do jedné série</label>
+      <input type="number" id="setSeries" min="5" max="240">
+    </div>
+    <div class="card">
+      <b>Záloha dat</b>
+      <p class="small" id="backupInfo"></p>
+      <div class="row"><button class="btn" id="bkSave">Zálohovat do souboru</button><label class="btn sec" for="bkFile" style="margin:0">Obnovit ze zálohy</label></div>
+      <input type="file" id="bkFile" accept=".json,application/json" hidden>
+      <p id="bkMsg" class="small"></p>
+    </div>
+    <div class="card" id="setInstall"></div>
+    <div class="card">
+      <b>Sdílet aplikaci</b>
+      <p class="small">Pošlete odkaz nebo ukažte QR kód známým.</p>
+      <div class="row"><button class="btn" id="shareApp">Sdílet odkaz</button><button class="btn sec" id="showQr">Ukázat QR kód</button></div>
+      <div id="qrBox" hidden><div id="qrSvg"></div><p class="mono" id="qrLink"></p></div>
+    </div>
+    <div class="card">
+      <div class="row"><button class="btn sec" data-go="about">O aplikaci</button><button class="btn del" id="wipe">Smazat všechna data</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-about">
+  <div class="head"><button class="back" data-go="settings">← Zpět</button><h2>O aplikaci</h2></div>
+  <div class="scroll">
+    <div class="card"><p id="aPurpose"></p></div>
+    <div class="card"><b>Soukromí</b><p id="aPrivacy"></p></div>
+    <div class="card"><p class="small" id="aMeta"></p><p><a id="aSource" href="#" hidden>Zdrojový kód</a></p></div>
+    <div class="row"><button class="btn sec" id="showWelcome">Zobrazit úvod znovu</button></div>
+  </div>
+</section>
+
+<section class="view" id="v-fatal">
+  <div class="top"><div class="hello"><div class="mascot" aria-hidden="true">🐣</div><div><h1>Ťuk</h1></div></div></div>
+  <div class="scroll"><div class="card"><p id="fatalMsg"></p></div></div>
+</section>
+
+</div>
+
+<div id="toast" role="status" aria-live="polite"><span class="msg" id="tMsg"></span><button id="tEdit">Upravit</button><button id="tUndo">Zrušit</button></div>
+<div id="sheetBg"></div><div id="sheet" role="dialog" aria-modal="true"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
